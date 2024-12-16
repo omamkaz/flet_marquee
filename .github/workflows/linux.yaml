@@ -68,9 +68,10 @@ jobs:
 
     - name: Flet Build Linux
       run: |
+        cd python/flet_marquee_app
         flutter doctor
         flutter config --no-analytics
-        flet build linux --verbose
+        poetry run flet build linux --verbose
 
     - name: Upload Linux Artifact
       uses: actions/upload-artifact@v4.3.4
