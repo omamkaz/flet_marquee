@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "flet-marquee"
+version = "0.1.0"
+description = "flet marquee text widget"
+authors = ["Osama Mohammed <omamkaz@gmail.com>"]
+readme = "README.md"
+packages = [{include = "flet_marquee"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+flet = "^0.25.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

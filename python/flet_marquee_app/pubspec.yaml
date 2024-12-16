@@ -1,0 +1,3 @@
+dependencies:
+  flet_marquee:
+    path: ../../flutter/flet_marquee
