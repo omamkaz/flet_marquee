@@ -71,13 +71,13 @@ jobs:
         cd python/flet_marquee_app
         flutter doctor
         flutter config --no-analytics
-        poetry run flet build linux --verbose
-        mv build/linux ../../
+        poetry run flet build web --verbose
+        mv build/web ../../
 
     - name: Upload Linux Artifact
       uses: actions/upload-artifact@v4.3.4
       with:
-        path: linux/
-        name: linux-build-artifact
+        path: web/
+        name: web-build-artifact
         if-no-files-found: warn
         overwrite: false
