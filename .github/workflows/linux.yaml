@@ -1,0 +1,81 @@
+name: Flet Linux Build
+
+on:
+  workflow_dispatch:
+
+env:
+  # https://flet.dev/docs/publish#versioning
+  PYTHON_VERSION: 3.12.5
+  FLUTTER_VERSION: 3.24.3
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Remove cache files
+      run: |
+        rm -rf .git
+        rm -rf .github
+        rm .gitignore
+
+    - name: Patch for APK build
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y \
+          curl \
+          git \
+          unzip \
+          xz-utils \
+          zip \
+          libglu1-mesa \
+          ninja-build \
+          libgtk-3-dev \
+          build-essential \
+          python3-dev \
+          libc6:amd64 libstdc++6:amd64 \
+          libbz2-1.0:amd64
+
+    - name: Setup Python ${{ env.PYTHON_VERSION }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        # architecture: 'x64'
+
+    - name: Setup Python Environment and Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install poetry flet[all]
+
+    # - name: Setup Java JDK
+    #   uses: actions/setup-java@v4.2.1
+    #   with:
+    #     distribution: 'temurin'
+    #     java-version: '21'
+        #architecture: 'aarch64'
+
+    # - name: Setup Android SDK
+    #   uses: android-actions/setup-android@v3
+
+    - name: Setup Flutter ${{ env.FLUTTER_VERSION }}
+      uses: subosito/flutter-action@v2
+      with:
+        channel: stable
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+
+    - name: Flet Build Linux
+      run: |
+        flutter doctor
+        flutter config --no-analytics
+        flet build linux --verbose
+
+    - name: Upload Linux Artifact
+      uses: actions/upload-artifact@v4.3.4
+      with:
+        path: build/linux
+        name: linux-build-artifact
+        if-no-files-found: warn
+        overwrite: false
