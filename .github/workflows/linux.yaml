@@ -72,12 +72,12 @@ jobs:
         flutter doctor
         flutter config --no-analytics
         poetry run flet build linux --verbose
-        ls -l build/
+        mv build/linux ../../
 
     - name: Upload Linux Artifact
       uses: actions/upload-artifact@v4.3.4
       with:
-        path: build/
+        path: linux/
         name: linux-build-artifact
         if-no-files-found: warn
         overwrite: false
