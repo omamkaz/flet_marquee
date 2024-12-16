@@ -72,7 +72,7 @@ jobs:
         flutter doctor
         flutter config --no-analytics
         poetry run flet build linux --verbose
-        ls -l
+        ls -l build/
 
     - name: Upload Linux Artifact
       uses: actions/upload-artifact@v4.3.4
