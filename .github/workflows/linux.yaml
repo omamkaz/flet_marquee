@@ -1,4 +1,4 @@
-name: Flet Linux Build
+name: Flet Split APK Build
 
 on:
   workflow_dispatch:
@@ -50,15 +50,15 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install poetry flet[all]
 
-    # - name: Setup Java JDK
-    #   uses: actions/setup-java@v4.2.1
-    #   with:
-    #     distribution: 'temurin'
-    #     java-version: '21'
+    - name: Setup Java JDK
+      uses: actions/setup-java@v4.2.1
+      with:
+        distribution: 'temurin'
+        java-version: '21'
         #architecture: 'aarch64'
 
-    # - name: Setup Android SDK
-    #   uses: android-actions/setup-android@v3
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
 
     - name: Setup Flutter ${{ env.FLUTTER_VERSION }}
       uses: subosito/flutter-action@v2
@@ -66,18 +66,17 @@ jobs:
         channel: stable
         flutter-version: ${{ env.FLUTTER_VERSION }}
 
-    - name: Flet Build Linux
+    - name: Flet Build APK
       run: |
-        cd python/flet_marquee_app
         flutter doctor
         flutter config --no-analytics
-        poetry run flet build web --verbose
-        mv build/web ../../
+        flet build apk --verbose
+        mv build/apk ../..
 
-    - name: Upload Linux Artifact
+    - name: Upload APK Artifact
       uses: actions/upload-artifact@v4.3.4
       with:
-        path: web/
-        name: web-build-artifact
+        path: apk/
+        name: apk-build-artifact
         if-no-files-found: warn
         overwrite: false
