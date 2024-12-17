@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:flet/flet.dart';
 
-class MarqueeControl extends StatelessWidget {
+class MarqueeControl extends StatefulWidget {
   final Control? parent;
   final Control control;
   final FletControlBackend backend;
@@ -15,10 +15,15 @@ class MarqueeControl extends StatelessWidget {
     });
 
   @override
+  State<MarqueeControl> createState() => _MarqueeControlState();
+}
+
+class _MarqueeControlState extends State<MarqueeControl> with FletStoreMixin {
+  @override
   Widget build(BuildContext context) {
 
     TextStyle? style;
-    var styleNameOrData = control.attrString("style", null);
+    var styleNameOrData = widget.control.attrString("style", null);
     if (styleNameOrData != null) {
         style = getTextStyle(context, styleNameOrData);
     }
@@ -30,7 +35,7 @@ class MarqueeControl extends StatelessWidget {
         }
     }
     //   TextStyle? themeStyle;
-    //   var styleName = control.attrString("theme_style", null);
+    //   var styleName = widget.control.attrString("theme_style", null);
     //   if (styleName != null) {
     //     themeStyle = getTextStyle(context, styleName);
     //   }
@@ -42,40 +47,39 @@ class MarqueeControl extends StatelessWidget {
     //   }
 
 
-    bool onDone = control.attrBool("onDone", false)!;
+    bool onDone = widget.control.attrBool("onDone", false)!;
     void onDone() {
-        if (control.attrBool("onDone", false)!) {
-            backend.triggerControlEvent(widget.control.id, "done");
+        if (widget.control.attrBool("onDone", false)!) {
+            widget.backend.triggerControlEvent(widget.control.id, "done");
         }
     }
 
     return constrainedControl(
       context,
       Marquee(
-        text: control.attrString("text", ""),
+        text: widget.control.attrString("text", ""),
         style: style,
-        scrollAxis: control.parseAxis("scrollAxis", Axis.horizontal),
-        crossAxisAlignment: parseCrossAxisAlignment(control.attrString("crossAxisAlignment"), CrossAxisAlignment.start)!,
-        blankSpace: control.attrDouble("blankSpace", 0.0),
-        velocity: control.attrDouble("velocity", 50.0),
-        pauseAfterRound: Duration(milliseconds: control.attrInt("pauseAfterRound", 0)),
-        startPadding: control.attrDouble("startPadding", 0.0),
-        accelerationDuration: Duration(milliseconds: control.attrInt("accelerationDuration", 0)),
-        accelerationCurve: parseCurve(control.attrString("accelerationCurve"), Curves.decelerate)!,
-        decelerationDuration: Duration(milliseconds: control.attrInt("decelerationDuration", 0)),
-        decelerationCurve: parseCurve(control.attrString("decelerationCurve"), Curves.decelerate)!,
-        showFadingOnlyWhenScrolling: control.attrBool("showFadingOnlyWhenScrolling", true),
-        numberOfRounds: control.attrInt("numberOfRounds")!,
-        fadingEdgeStartFraction: control.attrDouble("fadingEdgeStartFraction", 0.0),
-        fadingEdgeEndFraction: control.attrDouble("fadingEdgeEndFraction", 0.0),
-        startAfter: Duration(milliseconds: control.attrInt("startAfter", 0)),
-        textScaleFactor: control.attrDouble("textScaleFactor")!,
-        textDirection: control.attrBool("rtl", true) ? TextDirection.rtl : TextDirection.ltr,
+        scrollAxis: widget.control.parseAxis("scrollAxis", Axis.horizontal),
+        crossAxisAlignment: parseCrossAxisAlignment(widget.control.attrString("crossAxisAlignment"), CrossAxisAlignment.start)!,
+        blankSpace: widget.control.attrDouble("blankSpace", 0.0),
+        velocity: widget.control.attrDouble("velocity", 50.0),
+        pauseAfterRound: Duration(milliseconds: widget.control.attrInt("pauseAfterRound", 0)),
+        startPadding: widget.control.attrDouble("startPadding", 0.0),
+        accelerationDuration: Duration(milliseconds: widget.control.attrInt("accelerationDuration", 0)),
+        accelerationCurve: parseCurve(widget.control.attrString("accelerationCurve"), Curves.decelerate)!,
+        decelerationDuration: Duration(milliseconds: widget.control.attrInt("decelerationDuration", 0)),
+        decelerationCurve: parseCurve(widget.control.attrString("decelerationCurve"), Curves.decelerate)!,
+        showFadingOnlyWhenScrolling: widget.control.attrBool("showFadingOnlyWhenScrolling", true),
+        numberOfRounds: widget.control.attrInt("numberOfRounds")!,
+        fadingEdgeStartFraction: widget.control.attrDouble("fadingEdgeStartFraction", 0.0),
+        fadingEdgeEndFraction: widget.control.attrDouble("fadingEdgeEndFraction", 0.0),
+        startAfter: Duration(milliseconds: widget.control.attrInt("startAfter", 0)),
+        textScaleFactor: widget.control.attrDouble("textScaleFactor")!,
+        textDirection: widget.control.attrBool("rtl", true) ? TextDirection.rtl : TextDirection.ltr,
         onDone: onDone
       ),
-
-      parent,
-      control,
+      widget.parent,
+      control
     );
   }
 }
